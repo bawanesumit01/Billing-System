@@ -9,26 +9,27 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\DailyBalanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\AttendanceController;
 
 Route::get('/debug-session', function () {
     return response()->json([
-        'session_driver'  => config('session.driver'),
-        'cache_store'     => config('cache.default'),
-        'app_env'         => config('app.env'),
-        'session_path'    => storage_path('framework/sessions'),
-        'session_writable'=> is_writable(storage_path('framework/sessions')),
-        'csrf_token'      => csrf_token(),
+        'session_driver' => config('session.driver'),
+        'cache_store' => config('cache.default'),
+        'app_env' => config('app.env'),
+        'session_path' => storage_path('framework/sessions'),
+        'session_writable' => is_writable(storage_path('framework/sessions')),
+        'csrf_token' => csrf_token(),
     ]);
 });
 
 Route::get('/debug-routes', function () {
-    $routes = collect(\Route::getRoutes())->filter(function($r) {
+    $routes = collect(\Route::getRoutes())->filter(function ($r) {
         return str_contains($r->uri(), 'login');
-    })->map(function($r) {
+    })->map(function ($r) {
         return [
             'method' => implode('|', $r->methods()),
-            'uri'    => $r->uri(),
-            'name'   => $r->getName(),
+            'uri' => $r->uri(),
+            'name' => $r->getName(),
         ];
     })->values();
     return response()->json($routes);
@@ -52,8 +53,8 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // PROTECTED ROUTES
 Route::middleware(['checklogin'])->group(function () {
-    
-    
+
+
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     // ADMIN ONLY
@@ -79,6 +80,8 @@ Route::middleware(['checklogin'])->group(function () {
         Route::put('/staff/{id}', [StaffController::class, 'update'])->name('staff.update');
         Route::delete('/staff/{id}', [StaffController::class, 'destroy'])->name('staff.destroy');
 
+        Route::get('/attendance', [AttendanceController::class, 'attendanceList'])->name('attendance.list');
+
     });
 
     // Daily Balance (admin + staff)
@@ -95,7 +98,10 @@ Route::middleware(['checklogin'])->group(function () {
     Route::post('/billing/save', [BillingController::class, 'saveInvoice'])->name('billing.save');
     Route::get('/billing/invoice/{id}', [BillingController::class, 'showInvoice'])->name('billing.invoice');
     Route::get('/billing/invoices', [BillingController::class, 'invoiceList'])
-     ->name('billing.invoice-list');
+        ->name('billing.invoice-list');
     Route::post('/billing/mark-paid/{id}', [BillingController::class, 'markPaid'])->name('billing.markPaid');
+
+    Route::post('/clock-in', [AttendanceController::class, 'clockIn'])->name('clock.in');
+    Route::post('/clock-out', [AttendanceController::class, 'clockOut'])->name('clock.out');
 
 });

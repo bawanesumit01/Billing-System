@@ -25,19 +25,26 @@
                     </div>
                     <!-- End User Profile-->
                 </li>
-              
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark {{ request()->routeIs('dashboard') ? 'active bg-body' : '' }}"
-                            href="{{ route('dashboard') }}" aria-expanded="false"><i data-feather="home" class="feather-icon"></i><span
-                                class="hide-menu">Dashboard </span></a>
-                    </li>
-                    @if (session('role') === 'admin')
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link waves-effect waves-dark {{ request()->routeIs('dashboard') ? 'active bg-body' : '' }}"
+                        href="{{ route('dashboard') }}" aria-expanded="false"><i data-feather="home"
+                            class="feather-icon"></i><span class="hide-menu">Dashboard </span></a>
+                </li>
+                @if (session('role') === 'admin')
                     {{-- Staff Sidebar Item --}}
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark {{ request()->routeIs('staff.*') ? 'active bg-body' : '' }}"
                             href="{{ route('staff.index') }}" aria-expanded="false">
                             <i data-feather="users" class="feather-icon"></i>
                             <span class="hide-menu">Staff</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark {{ request()->routeIs('attendance.list') ? 'active bg-body' : '' }}"
+                            href="{{ route('attendance.list') }}" aria-expanded="false">
+                            <i data-feather="clock" class="feather-icon"></i>
+                            <span class="hide-menu">Attendance</span>
                         </a>
                     </li>
 
