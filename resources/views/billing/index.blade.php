@@ -5,12 +5,11 @@
 
     <div class="page-wrapper">
 
-        {{-- â”€â”€ PAGE HEADER â”€â”€ --}}
         <div class="billing-wrapper">
 
 
             <div class="row g-1">
-                {{-- â”€â”€ SEARCH SECTION â”€â”€ --}}
+
                 <div class="col-lg-5">
                     <div class="search-card">
                         <label>Search Product by Name or Code</label>
@@ -20,17 +19,17 @@
                             <div id="productSuggestions" style="display:none;"></div>
                         </div>
                         <div id="product_info" class="alert mb-0" style="display:none;">
-                            <strong id="p_name"></strong> | Price: â‚¹<span id="p_price"></span> | GST: <span
+                            <strong id="p_name"></strong> | Price: ₹ <span id="p_price"></span> | GST: <span
                                 id="p_gst"></span>% | Stock: <span id="p_stock"></span> <span id="stock_badge"></span>
                         </div>
                     </div>
                 </div>
 
-                {{-- â”€â”€ MANUAL ENTRY â”€â”€ --}}
+               
                 <div class="col-lg-7">
                     <div class="manual-card">
                         <div class="row">
-                            <div class="col-md-3 section-badge align-self-end py-3">ðŸ“¦ Add Manually</div>
+                            <div class="col-md-3 section-badge align-self-end py-3"><i class="bi bi-box"></i> Add Manually</div>
                             <div class="col-md-9">
                                 <label>Product Name</label>
                                 <input type="text" id="manual_name" class="form-control form-control-sm"
@@ -40,7 +39,7 @@
                         <div class="row g-1 align-items-end">
 
                             <div class="col-md-3">
-                                <label>Price (â‚¹)</label>
+                                <label>Price ₹</label>
                                 <input type="number" id="manual_price" class="form-control form-control-sm"
                                     placeholder="0.00" step="0.01" min="0">
                             </div>
@@ -64,10 +63,10 @@
                 </div>
             </div>
 
-            {{-- â”€â”€ INVOICE TABLE â”€â”€ --}}
+           
             <div class="invoice-table-card">
                 <div class="table-header">
-                    <span>ðŸ§¾ Invoice Items</span>
+                    <span><i class="bi bi-receipt-cutoff"></i> Invoice Items</span>
                     <span class="item-count" id="item-count-badge">0 items</span>
                 </div>
                 <div class="table-responsive">
@@ -76,10 +75,10 @@
                             <tr>
                                 <th>Code</th>
                                 <th>Product Name</th>
-                                <th>Price (â‚¹)</th>
+                                <th>Price (₹)</th>
                                 <th>Qty</th>
-                                <th>GST (â‚¹)</th>
-                                <th>Total (â‚¹)</th>
+                                <th>GST (₹)</th>
+                                <th>Total (₹)</th>
                                 <th>Remove</th>
                             </tr>
                         </thead>
@@ -101,7 +100,7 @@
             <div class="row g-1">
                 <div class="col-lg-8">
                     <div class="customer-card">
-                        <div class="section-badge">ðŸ‘¤ Customer & Payment</div>
+                        <div class="section-badge"><i class="bi bi-person-fill"></i> Customer & Payment</div>
                         <div class="row g-1">
                             <div class="col-md-4">
                                 <label>Customer Name</label>
@@ -122,8 +121,8 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <label>Discount (â‚¹)</label>
-                                <input id="invoice_discount" type="number" min="0" step="0.01" value="0"
+                                <label>Discount (₹)</label>
+                                <input id="invoice_discount" type="number" min="0" value="0"
                                     class="form-control form-control-sm">
                             </div>
                         </div>
@@ -143,19 +142,19 @@
                         <div class="totals-inner">
                             <div class="totals-row">
                                 <span class="label">Subtotal</span>
-                                <span class="value" id="subtotal">â‚¹0.00</span>
+                                <span class="value" id="subtotal">₹0.00</span>
                             </div>
                             <div class="totals-row">
                                 <span class="label">Discount</span>
-                                <span class="value discount-val" id="discounts">â‚¹0.00</span>
+                                <span class="value discount-val" id="discounts">₹0.00</span>
                             </div>
                             <div class="totals-row">
                                 <span class="label">GST</span>
-                                <span class="value" id="gst_total">â‚¹0.00</span>
+                                <span class="value" id="gst_total">₹0.00</span>
                             </div>
                             <div class="totals-row grand">
-                                <span class="label">ðŸ’° Grand Total</span>
-                                <span class="value" id="grand_total">â‚¹0.00</span>
+                                <span class="label"><i class="bi bi-cash-stack"></i> Grand Total</span>
+                                <span class="value" id="grand_total">₹0.00</span>
                             </div>
                         </div>
                     </div>
@@ -216,11 +215,13 @@
                         store: storeId
                     },
                     success: function(data) {
+                        console.log('Search success:', data);
+
                         nameSuggestions = Array.isArray(data) ? data : [];
                         showSuggestions();
                     },
-                    error: function() {
-                        $suggestBox.hide();
+                    error: function(xhr) {
+                        console.log('Search error:', xhr.responseText);
                     }
                 });
             });
@@ -236,9 +237,9 @@
 
                 $.each(nameSuggestions, function(i, p) {
                     const $div = $('<div></div>').html(`
-        <strong style="color:#4f46e5">${p.product_code}</strong> â€” ${p.name}
-        <small style="color:#94a3b8;float:right">â‚¹${parseFloat(p.price).toFixed(2)} | Stock: ${p.stock}</small>
-      `);
+                    <strong style="color:#4f46e5">${p.product_code}</strong> - ${p.name}
+                    <small style="color:#94a3b8;float:right"> ₹ ${parseFloat(p.price).toFixed(2)} | Stock: ${p.stock}</small>
+                `);
 
                     $div.on('mouseover', function() {
                         nameSelectedIndex = i;
@@ -320,9 +321,9 @@
                 if (stock <= 0) {
                     $badge.html('<span class="stock-out">Out of Stock</span>');
                 } else if (stock < 10) {
-                    $badge.html('<span class="stock-low">âš  Low Stock</span>');
+                    $badge.html('<span class="stock-low"><i class="bi bi-exclamation-triangle"></i> Low Stock</span>');
                 } else {
-                    $badge.html('<span class="stock-ok">âœ“ In Stock</span>');
+                    $badge.html('<span class="stock-ok"><i class="bi bi-check-lg"></i> In Stock</span>');
                 }
 
                 $('#product_info').show();
@@ -399,15 +400,15 @@
 
                 if (items.length === 0) {
                     $tbody.html(`
-        <tr>
-          <td colspan="7">
-            <div class="empty-state">
-              <i class="mdi mdi-cart-outline"></i>
-              <p>No items yet â€” search or add manually above</p>
-            </div>
-          </td>
-        </tr>
-      `);
+                            <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                <i class="mdi mdi-cart-outline"></i>
+                                <p>No items yet<i class="bi bi-dash-lg"></i> search or add manually above</p>
+                                </div>
+                            </td>
+                            </tr>
+                        `);
                     updateBadge(0);
                     updateTotals(0, 0);
                     return;
@@ -425,16 +426,16 @@
                     gstTotal += it.gst_amount;
 
                     const row = `
-        <tr>
-          <td><span style="background:#ede9fe;color:#4f46e5;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:700;">${it.product_code}</span></td>
-          <td style="font-weight:600;color:#1e293b;font-size:12px;">${it.product_name}</td>
-          <td style="color:#0891b2;font-weight:600;font-size:12px;">â‚¹${money(it.unit_price)}</td>
-          <td><input type="number" class="form-control qty-input qty-change" min="1" data-index="${idx}" value="${it.qty}"></td>
-          <td style="color:#d97706;font-size:12px;">â‚¹${money(it.gst_amount)}</td>
-          <td style="color:#059669;font-weight:700;font-size:12px;">â‚¹${money(it.total_amount)}</td>
-          <td><button type="button" class="btn-remove-item remove-item" data-index="${idx}"><i class="mdi mdi-delete"></i></button></td>
-        </tr>
-      `;
+                            <tr>
+                            <td><span style="background:#ede9fe;color:#4f46e5;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:700;">${it.product_code}</span></td>
+                            <td style="font-weight:600;color:#1e293b;font-size:12px;">${it.product_name}</td>
+                            <td style="color:#0891b2;font-weight:600;font-size:12px;">₹${money(it.unit_price)}</td>
+                            <td><input type="number" class="form-control qty-input qty-change" min="1" data-index="${idx}" value="${it.qty}"></td>
+                            <td style="color:#d97706;font-size:12px;">₹${money(it.gst_amount)}</td>
+                            <td style="color:#059669;font-weight:700;font-size:12px;">₹${money(it.total_amount)}</td>
+                            <td><button type="button" class="btn-remove-item remove-item" data-index="${idx}"><i class="mdi mdi-delete"></i></button></td>
+                            </tr>
+                        `;
 
                     $tbody.append(row);
                 });
@@ -454,10 +455,10 @@
                 const disc = Math.min(Math.max(parseFloat($('#invoice_discount').val()) || 0, 0), subtotal);
                 const grand = (subtotal - disc) + gstTotal;
 
-                $('#subtotal').text('â‚¹' + money(subtotal));
-                $('#discounts').text('â‚¹' + money(disc));
-                $('#gst_total').text('â‚¹' + money(gstTotal));
-                $('#grand_total').text('â‚¹' + money(grand));
+                $('#subtotal').text('₹' + money(subtotal));
+                $('#discounts').text('₹' + money(disc));
+                $('#gst_total').text('₹' + money(gstTotal));
+                $('#grand_total').text('₹' + money(grand));
             }
 
             $(document).on('change', '.qty-change', function() {

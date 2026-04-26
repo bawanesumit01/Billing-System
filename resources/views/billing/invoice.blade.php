@@ -230,7 +230,7 @@
                 <h3>Kalpak Enterprises</h3>
                 <p>Phone no.: 9552513349</p>
             </div>
-            <img src="{{ asset('public/assets/images/kalpak-logo.jpeg') }}" width="30%">
+            <img src="{{ asset('/assets/images/kalpak-logo.jpeg') }}" width="30%">
         </div>
 
         <div class="title">Tax Invoice</div>

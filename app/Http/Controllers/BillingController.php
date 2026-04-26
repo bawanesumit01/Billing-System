@@ -29,7 +29,7 @@ class BillingController extends Controller
     // ── AJAX: SEARCH PRODUCTS BY NAME OR CODE ─────────────────────
     public function searchProduct(Request $request)
     {
-       
+      
         $query = trim($request->get('q', ''));
         $storeId = intval($request->get('store', session('store_id')));
 
@@ -38,8 +38,7 @@ class BillingController extends Controller
         }
 
         // Products table
-        $products = Product::where('store_id', $storeId)
-            ->where(function ($q) use ($query) {
+        $products = Product::where(function ($q) use ($query) {
                 $q->where('name', 'like', "%{$query}%")
                     ->orWhere('product_code', 'like', "%{$query}%");
             })
@@ -52,8 +51,7 @@ class BillingController extends Controller
             });
 
         // Other Products table
-        $otherProducts = OtherProduct::where('store_id', $storeId)
-            ->where(function ($q) use ($query) {
+        $otherProducts = OtherProduct::where(function ($q) use ($query) {
                 $q->where('name', 'like', "%{$query}%")
                     ->orWhere('product_code', 'like', "%{$query}%");
             })
